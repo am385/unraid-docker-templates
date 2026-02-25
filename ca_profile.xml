@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Maintainer>
+	<Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/master/am385/images/profile.png</Icon>
+	<Profile>
+		unRAID Docker Templates maintained by am385.
+	</Profile>
+</Maintainer>

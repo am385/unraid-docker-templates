@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Container version="2">
+	<!-- Find and replace 'APPNAME' with the name of the application e.g. 'lineup' -->
+	<!-- Find and replace 'PROJECTURL' with the project URL of the application e.g. 'https://github.com/am385/lineup' -->
+	<!-- Find and replace 'OVERVIEWTEXT' with the description of the application -->
+	<!-- Find and replace 'CACATEGORY' with the CA category of the application e.g. 'MediaServer:' -->
+	<!-- Find and replace '0000' with the Web UI port of the application e.g. '8080' -->
+	<!-- Check extra-parameters, check network type -->
+	<!-- Remove any unrequired paths, e.g. /data /media -->
+	<!-- Remove these comments -->
+	<Name>APPNAME</Name>
+	<Beta>false</Beta>
+	<Category>CACATEGORY</Category>
+	<Repository>am385/APPNAME</Repository>
+	<Registry>https://hub.docker.com/r/am385/APPNAME</Registry>
+	<Network>bridge</Network>
+	<Privileged>false</Privileged>
+    <ExtraParams>--restart=always</ExtraParams>
+	<Shell>bash</Shell>
+	<GitHub>https://github.com/am385/APPNAME</GitHub>
+	<ReadMe>https://github.com/am385/APPNAME#readme</ReadMe>
+    <Support>https://github.com/am385/APPNAME/issues/new/choose</Support>
+	<Project>PROJECTURL</Project>
+	<Overview>OVERVIEWTEXT</Overview>
+	<WebUI>http://[IP]:[PORT:0000]</WebUI>
+	<TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/master/am385/APPNAME.xml</TemplateURL>
+	<Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/master/am385/images/APPNAME-icon.png</Icon>
+    <Date>2026-01-01</Date>
+	<Changes>
+		### DATE (YYYY-MM-DD)
+		- Change Description.
+	</Changes>
+
+	<Config Name="Web Interface (HTTP)" Target="0000" Default="0000" Mode="tcp" Description="This is the Web UI port for the application." Type="Port" Display="always" Required="true" Mask="false"/>
+    <Config Name="Web Interface (HTTPS)" Target="0000" Default="0000" Mode="tcp" Description="Optional - Https webUI (you need to set up your own certificate)." Type="Port" Display="advanced" Required="false" Mask="false"/>
+
+	<Config Name="Appdata" Target="/config" Default="/mnt/user/appdata/APPNAME" Mode="rw" Description="This is the container path to your configuration files, e.g. databases, configuration files, logs etc." Type="Path" Display="always" Required="true" Mask="false"/>
+
+	<Config Name="Path: /media" Target="/media" Default="/mnt/user" Mode="rw" Description="This is the container path to your media files, e.g. movies, tv, music, pictures etc." Type="Path" Display="always" Required="false" Mask="false"/>
+	<Config Name="Path: /data" Target="/data" Default="" Mode="rw" Description="This is the container path to your downloaded files or user created content." Type="Path" Display="always" Required="true" Mask="false"/>
+
+	<Config Name="Variable: PUID" Target="PUID" Default="99" Description="User ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
+	<Config Name="Variable: PGID" Target="PGID" Default="100" Description="Group ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
+	<Config Name="Variable: UMASK" Target="UMASK" Default="022" Description="UMASK for the running container" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+</Container>

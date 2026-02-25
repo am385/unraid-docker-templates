@@ -1,0 +1,16 @@
+# ignore notes files
+todo.txt
+notes.txt
+
+# ignore mac generated files
+.DS_Store
+
+# ignore ide files
+.idea
+.vscode
+
+# ignore compiled python scripts
+*.pyc
+
+# ignore virtual env
+venv

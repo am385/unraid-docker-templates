@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<Container version="2">
+	<Name>Lineup</Name>
+	<Beta>false</Beta>
+	<Category>MediaServer:Video</Category>
+	<Repository>am385/lineup</Repository>
+	<Registry>https://hub.docker.com/r/am385/lineup</Registry>
+	<Network>bridge</Network>
+	<Privileged>false</Privileged>
+    <ExtraParams>--restart=always</ExtraParams>
+	<Shell>bash</Shell>
+	<GitHub>https://github.com/am385/lineup</GitHub>
+	<ReadMe>https://github.com/am385/lineup#readme</ReadMe>
+    <Support>https://github.com/am385/lineup/issues/new/choose</Support>
+	<Project>https://github.com/am385/lineup</Project>
+	<Overview>Lineup is an application that fetches Electronic Program Guide (EPG) data from a HDHomeRun network TV tuner and converts it into XMLTV format — the standard format used by media servers like Jellyfin and Plex for TV guide display. It includes a web-based dashboard, a terminal UI, live TV streaming with transcoding, and automatic scheduled EPG fetching with smart incremental updates.</Overview>
+	<WebUI>http://[IP]:[PORT:8080]</WebUI>
+	<TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/lineup.xml</TemplateURL>
+	<Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/images/lineup-icon.png</Icon>
+	<Date>2026-02-25</Date>
+	<Changes>
+		### 2026-02-25
+		- Initial release
+	</Changes>
+	<Config Name="Web Interface (HTTP)" Target="8080" Default="8080" Mode="tcp" Description="This is the Web UI port for the application." Type="Port" Display="always" Required="true" Mask="false"/>
+    <Config Name="Web Interface (HTTPS)" Target="8443" Default="8443" Mode="tcp" Description="Optional - Https webUI (you need to set up your own certificate)." Type="Port" Display="advanced" Required="false" Mask="false"/>
+
+	<Config Name="Appdata" Target="/config" Default="/mnt/user/appdata/lineup" Mode="rw" Description="This is the container path to your configuration files, e.g. databases, configuration files, logs etc." Type="Path" Display="always" Required="true" Mask="false"/>
+	<Config Name="Path: /xmltv" Target="/xmltv" Default="" Mode="rw" Description="This is the container path to where the XMLTV file will be stored." Type="Path" Display="always" Required="true" Mask="false" />
+
+    <Config Name="Variable: PUID" Target="PUID" Default="99" Description="User ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
+    <Config Name="Variable: PGID" Target="PGID" Default="100" Description="Group ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
+    <Config Name="Variable: UMASK" Target="UMASK" Default="000" Description="UMASK for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
+  
+</Container>

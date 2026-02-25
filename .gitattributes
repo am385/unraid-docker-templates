@@ -1,0 +1,25 @@
+# Define the default behavior where GitHub attempts to detect the file type and set the line endings correctly
+* text=auto
+
+# Define line endings to be unix (LF) for GitHub files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.gitconfig text eol=lf
+LICENSE text eol=lf
+*.md text eol=lf
+
+# Define line endings to be unix (LF) for source code
+*.json text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.bat text eol=lf
+Dockerfile text eol=lf
+
+# Define binary files to be excluded from modification
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
