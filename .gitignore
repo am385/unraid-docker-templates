@@ -8,6 +8,7 @@ notes.txt
 # ignore ide files
 .idea
 .vscode
+.vs
 
 # ignore compiled python scripts
 *.pyc
