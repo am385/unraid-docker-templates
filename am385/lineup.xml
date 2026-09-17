@@ -13,7 +13,7 @@
   <ReadMe>https://github.com/am385/Lineup#readme</ReadMe>
   <Support>https://github.com/am385/Lineup/issues/new/choose</Support>
   <Project>https://github.com/am385/Lineup</Project>
-  <Overview>Lineup provides a web dashboard for HDHomeRun discovery and proxying, live TV streaming, scheduled EPG collection, and XMLTV output for media servers such as Jellyfin and Plex. IMPORTANT FOR 2.0 UPGRADES: the persistent container path changed from /config to /appdata. Edit the existing Appdata mapping so that /appdata points to the same host directory previously mapped to /config before starting Lineup 2.0.</Overview>
+  <Overview>Lineup provides a web dashboard for HDHomeRun discovery and proxying, live TV streaming, scheduled EPG collection, and XMLTV output for media servers such as Jellyfin and Plex. BREAKING 2.0 HOST LAYOUT: before starting Lineup 2.0, existing users must move or copy the contents of their prior Lineup appdata directory (whether its container target was /config or /appdata) into /mnt/user/appdata/lineup/data, or explicitly change this template's Appdata host path to retain their existing directory. Otherwise, Lineup starts as a new installation. HTTPS certificates remain separate under /mnt/user/appdata/lineup/certs and must not be moved into the data directory.</Overview>
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/lineup.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/images/lineup-icon.png</Icon>
@@ -21,8 +21,11 @@
   <Changes>
     ### 2026-09-17
     - Updated the template for Lineup 2.0.0.
-    - BREAKING: The persistent container path changed from /config to /appdata. Existing users must map /appdata to their existing Lineup appdata host directory before starting 2.0.
+    - BREAKING HOST LAYOUT: Appdata now defaults to /mnt/user/appdata/lineup/data on the host and maps to /appdata in the container.
+    - BEFORE STARTING 2.0: existing users must move or copy their prior Lineup appdata contents (whether previously mapped to /config or /appdata) into /mnt/user/appdata/lineup/data, or explicitly retain their existing Appdata host-path mapping. Otherwise, Lineup starts as a new installation.
+    - HTTPS certificates remain in the separate /mnt/user/appdata/lineup/certs directory and must not be moved into the data directory.
     - Added the HDHomeRun discovery/proxy and SSDP UDP port mappings.
+    - Added read-only HTTPS certificate directory, optional certificate password, and optional OpenTelemetry settings.
 
     ### 2026-02-25
     - Initial release
@@ -32,8 +35,12 @@
   <Config Name="HDHomeRun Discovery / Proxy" Target="65001" Default="65001" Mode="udp" Description="Optional UDP port used for HDHomeRun discovery and proxy traffic." Type="Port" Display="always" Required="false" Mask="false"/>
   <Config Name="SSDP Discovery" Target="1900" Default="1900" Mode="udp" Description="Optional UDP port used for SSDP discovery traffic." Type="Port" Display="advanced" Required="false" Mask="false"/>
 
-  <Config Name="Appdata" Target="/appdata" Default="/mnt/user/appdata/lineup" Mode="rw" Description="Persistent Lineup settings, database, and other application-owned state. For a 2.0 upgrade, keep your existing host path but change its container path from /config to /appdata." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="Appdata" Target="/appdata" Default="/mnt/user/appdata/lineup/data" Mode="rw" Description="Persistent Lineup settings, database, and other application-owned state. BREAKING 2.0 MIGRATION: before starting 2.0, move or copy the contents of your prior Lineup appdata directory (whether previously mapped to /config or /appdata) into /mnt/user/appdata/lineup/data, or explicitly retain your existing host path here. Otherwise, Lineup starts as a new installation. Keep HTTPS certificates in the separate certificate directory; do not move them into this data directory." Type="Path" Display="always" Required="true" Mask="false"/>
   <Config Name="XMLTV Output" Target="/xmltv" Default="" Mode="rw" Description="Host path where Lineup stores generated XMLTV output." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="HTTPS Certificate Directory" Target="/app/certs" Default="/mnt/user/appdata/lineup/certs" Mode="ro" Description="Host directory containing the HTTPS certificate named lineup.pfx. The certificate is available in the container at /app/certs/lineup.pfx." Type="Path" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="HTTPS Certificate Password" Target="Lineup__Https__CertificatePassword" Default="" Description="Optional password for lineup.pfx. Leave blank when using a passwordless PFX certificate." Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="OpenTelemetry Endpoint" Target="Lineup__Logging__OpenTelemetry__Endpoint" Default="" Description="Optional OTLP endpoint. Leave blank to disable OpenTelemetry export." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="OpenTelemetry Protocol" Target="Lineup__Logging__OpenTelemetry__Protocol" Default="httpProtobuf" Description="OTLP transport protocol. Supported values are httpProtobuf and grpc." Type="Variable" Display="advanced" Required="false" Mask="false"/>
 
   <Config Name="Variable: PUID" Target="PUID" Default="99" Description="User ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
   <Config Name="Variable: PGID" Target="PGID" Default="100" Description="Group ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
