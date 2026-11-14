@@ -13,12 +13,19 @@
   <ReadMe>https://github.com/am385/Lineup#readme</ReadMe>
   <Support>https://github.com/am385/Lineup/issues/new/choose</Support>
   <Project>https://github.com/am385/Lineup</Project>
-  <Overview>Lineup provides a web dashboard for HDHomeRun discovery and proxying, live TV streaming, scheduled EPG collection, and XMLTV output for media servers such as Jellyfin and Plex. BREAKING 2.0 HOST LAYOUT: before starting Lineup 2.0, existing users must move or copy the contents of their prior Lineup appdata directory (whether its container target was /config or /appdata) into /mnt/user/appdata/lineup/data, or explicitly change this template's Appdata host path to retain their existing directory. Otherwise, Lineup starts as a new installation. HTTPS certificates remain separate under /mnt/user/appdata/lineup/certs and must not be moved into the data directory.</Overview>
+  <Overview>Lineup provides a web dashboard for multi-tuner management and proxying, live TV streaming, scheduled guide collection, and guide output for media servers such as Jellyfin and Plex. IMPORTANT FOR 3.0 UPGRADES: Lineup 3.0 intentionally does not migrate state from earlier releases. Back up existing data, then complete Lineup's required factory reset or select a clean Appdata host directory. Lineup 3.0 uses /guide for generated guide outputs and TCP ports 8600-8615 for optional dedicated virtual-output listeners.</Overview>
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/lineup.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/images/lineup-icon.png</Icon>
-  <Date>2026-10-04</Date>
+  <Date>2026-11-13</Date>
   <Changes>
+    ### 2026-11-13
+    - Updated the template for Lineup 3.0.0.
+    - BREAKING: Lineup 3.0 is an intentional configuration and storage reset. Back up existing data, then complete the required factory reset or use a clean Appdata host directory; persisted state from earlier releases is not migrated.
+    - Replaced the /xmltv mapping with /guide for generated guide outputs.
+    - Added the optional TCP 8600-8615 dedicated virtual-output listener range.
+    - Removed unsupported PUID, PGID, and UMASK environment fields.
+
     ### 2026-10-04
     - Updated the template for Lineup 2.2.0.
     - Added the transient stream data mapping used for CMAF fragments and subtitle sidecars.
@@ -36,19 +43,16 @@
   </Changes>
   <Config Name="Web Interface (HTTP)" Target="8080" Default="8080" Mode="tcp" Description="Host port mapped to Lineup's HTTP listener on TCP port 8080." Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="Web Interface (HTTPS)" Target="8443" Default="8443" Mode="tcp" Description="Optional host port mapped to Lineup's HTTPS listener on TCP port 8443. HTTPS must be configured in Lineup." Type="Port" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Virtual Output Listeners" Target="8600-8615" Default="8600-8615" Mode="tcp" Description="Optional dedicated virtual-output listener range. The host range must contain the same number of ports as the fixed container range. Leave at 8600-8615 unless those host ports conflict." Type="Port" Display="advanced" Required="false" Mask="false"/>
   <Config Name="HDHomeRun Discovery / Proxy" Target="65001" Default="65001" Mode="udp" Description="Optional UDP port used for HDHomeRun discovery and proxy traffic." Type="Port" Display="always" Required="false" Mask="false"/>
   <Config Name="SSDP Discovery" Target="1900" Default="1900" Mode="udp" Description="Optional UDP port used for SSDP discovery traffic." Type="Port" Display="advanced" Required="false" Mask="false"/>
 
-  <Config Name="Appdata" Target="/appdata" Default="/mnt/user/appdata/lineup/data" Mode="rw" Description="Persistent Lineup settings, database, and other application-owned state." Type="Path" Display="always" Required="true" Mask="false"/>
-  <Config Name="XMLTV Output" Target="/xmltv" Default="" Mode="rw" Description="Host path where Lineup stores generated XMLTV output." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="Appdata" Target="/appdata" Default="/mnt/user/appdata/lineup/data" Mode="rw" Description="Persistent Lineup settings, database, and other application-owned state. Lineup 3.0 does not migrate state from earlier releases; back up existing data, then complete the required factory reset or select a clean host directory." Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="Guide Output" Target="/guide" Default="/mnt/user/appdata/lineup/guide" Mode="rw" Description="Host path where Lineup stores generated guide outputs, including XMLTV and JSON files." Type="Path" Display="always" Required="true" Mask="false"/>
   <Config Name="Transient Stream Data" Target="/transient" Default="/tmp/lineup_transient" Mode="rw" Description="RAM-backed host path for temporary CMAF fragments and subtitle sidecars. Contents are cleared when Unraid reboots. Active streams consume system memory; use a disk-backed host path instead if memory is limited or many concurrent streams are expected." Type="Path" Display="advanced" Required="false" Mask="false"/>
   <Config Name="HTTPS Certificate Directory" Target="/app/certs" Default="/mnt/user/appdata/lineup/certs" Mode="ro" Description="Host directory containing the HTTPS certificate named lineup.pfx. The certificate is available in the container at /app/certs/lineup.pfx." Type="Path" Display="advanced" Required="false" Mask="false"/>
   <Config Name="HTTPS Certificate Password" Target="Lineup__Https__CertificatePassword" Default="" Description="Optional password for lineup.pfx. Leave blank when using a passwordless PFX certificate." Type="Variable" Display="advanced" Required="false" Mask="true"/>
   <Config Name="OpenTelemetry Endpoint" Target="Lineup__Logging__OpenTelemetry__Endpoint" Default="" Description="Optional OTLP endpoint. Leave blank to disable OpenTelemetry export." Type="Variable" Display="advanced" Required="false" Mask="false"/>
   <Config Name="OpenTelemetry Protocol" Target="Lineup__Logging__OpenTelemetry__Protocol" Default="httpProtobuf" Description="OTLP transport protocol. Supported values are httpProtobuf and grpc." Type="Variable" Display="advanced" Required="false" Mask="false"/>
-
-  <Config Name="Variable: PUID" Target="PUID" Default="99" Description="User ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
-  <Config Name="Variable: PGID" Target="PGID" Default="100" Description="Group ID for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
-  <Config Name="Variable: UMASK" Target="UMASK" Default="000" Description="UMASK for the running container" Type="Variable" Display="advanced" Required="true" Mask="false"/>
 
 </Container>
