@@ -7,18 +7,23 @@
   <Registry>https://hub.docker.com/r/am385/lineup</Registry>
   <Network>bridge</Network>
   <Privileged>false</Privileged>
-  <ExtraParams>--restart=always</ExtraParams>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
   <Shell>bash</Shell>
   <GitHub>https://github.com/am385/Lineup</GitHub>
   <ReadMe>https://github.com/am385/Lineup#readme</ReadMe>
   <Support>https://github.com/am385/Lineup/issues/new/choose</Support>
   <Project>https://github.com/am385/Lineup</Project>
-  <Overview>Lineup provides a web dashboard for multi-tuner management and proxying, live TV streaming, scheduled guide collection, and guide output for media servers such as Jellyfin and Plex. IMPORTANT FOR 3.0 UPGRADES: Lineup 3.0 intentionally does not migrate state from earlier releases. Back up existing data, then complete Lineup's required factory reset or select a clean Appdata host directory. Lineup 3.0 uses /guide for generated guide outputs and TCP ports 8600-8615 for optional dedicated virtual-output listeners.</Overview>
+  <Overview>Lineup provides a web dashboard for multi-tuner management and proxying, live TV streaming, scheduled guide collection, and guide output for media servers such as Jellyfin and Plex.[br][br]CPU-only operation is the default. For AMD or Intel hardware encoding, configure the host graphics driver and add [b]--device=/dev/dri[/b] to Extra Parameters in Advanced View. For least-privilege access, use only the selected render node, such as [b]--device=/dev/dri/renderD128[/b]. If needed, also add [b]--group-add=&lt;gid&gt;[/b] using the render node's numeric group. Select VA-API for AMD; Intel can use QSV or VA-API.[br][br]For NVIDIA NVENC, install the Unraid NVIDIA driver/runtime, add [b]--runtime=nvidia[/b] to Extra Parameters unless it is already the default runtime, and enter the GPU UUID or selected index in [b]NVIDIA Visible Devices[/b]. The Lineup image supplies the required NVIDIA driver capabilities.[br][br]Exposing a GPU does not force transcoding; Lineup uses hardware encoding only when the effective settings require video conversion. AMD AMF is supported only for native Windows, not this Linux container.[br][br][b]IMPORTANT FOR 3.0 UPGRADES:[/b] Lineup 3.0 intentionally does not migrate state from earlier releases. Back up existing data, then complete Lineup's required factory reset or select a clean Appdata host directory. Lineup 3.0 uses /guide for generated guide outputs and TCP ports 8600-8615 for optional dedicated virtual-output listeners.</Overview>
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/lineup.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/images/lineup-icon.png</Icon>
-  <Date>2026-11-13</Date>
+  <Date>2026-11-15</Date>
   <Changes>
+    ### 2026-11-15
+    - Added Intel/AMD and NVIDIA hardware-transcoding setup guidance and optional NVIDIA GPU selection.
+    - CPU-only deployments remain unchanged and require no GPU configuration.
+    - Changed the restart policy to unless-stopped so a manual stop persists across Unraid or Docker restarts.
+
     ### 2026-11-13
     - Updated the template for Lineup 3.0.0.
     - BREAKING: Lineup 3.0 is an intentional configuration and storage reset. Back up existing data, then complete the required factory reset or use a clean Appdata host directory; persisted state from earlier releases is not migrated.
@@ -54,5 +59,7 @@
   <Config Name="HTTPS Certificate Password" Target="Lineup__Https__CertificatePassword" Default="" Description="Optional password for lineup.pfx. Leave blank when using a passwordless PFX certificate." Type="Variable" Display="advanced" Required="false" Mask="true"/>
   <Config Name="OpenTelemetry Endpoint" Target="Lineup__Logging__OpenTelemetry__Endpoint" Default="" Description="Optional OTLP endpoint. Leave blank to disable OpenTelemetry export." Type="Variable" Display="advanced" Required="false" Mask="false"/>
   <Config Name="OpenTelemetry Protocol" Target="Lineup__Logging__OpenTelemetry__Protocol" Default="httpProtobuf" Description="OTLP transport protocol. Supported values are httpProtobuf and grpc." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+
+  <Config Name="NVIDIA Visible Devices" Target="NVIDIA_VISIBLE_DEVICES" Default="" Description="Optional NVIDIA GPU UUID or selected host index. Requires the Unraid NVIDIA driver/container runtime and --runtime=nvidia in Extra Parameters unless NVIDIA is already the default runtime. Leave blank for CPU-only, Intel, or AMD deployments." Type="Variable" Display="advanced" Required="false" Mask="false"/>
 
 </Container>
