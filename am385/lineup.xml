@@ -7,7 +7,7 @@
   <Registry>https://hub.docker.com/r/am385/lineup</Registry>
   <Network>bridge</Network>
   <Privileged>false</Privileged>
-  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <ExtraParams>--restart=unless-stopped --cap-add=PERFMON</ExtraParams>
   <Shell>bash</Shell>
   <GitHub>https://github.com/am385/Lineup</GitHub>
   <ReadMe>https://github.com/am385/Lineup#readme</ReadMe>
@@ -17,8 +17,11 @@
   <WebUI>http://[IP]:[PORT:8080]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/lineup.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/am385/unraid-docker-templates/main/am385/images/lineup-icon.png</Icon>
-  <Date>2026-11-15</Date>
+  <Date>2026-11-18</Date>
   <Changes>
+    ### 2026-11-18
+    - Added the PERFMON capability required for Intel GPU performance-counter monitoring.
+
     ### 2026-11-15
     - Added Intel/AMD and NVIDIA hardware-transcoding setup guidance and optional NVIDIA GPU selection.
     - CPU-only deployments remain unchanged and require no GPU configuration.
